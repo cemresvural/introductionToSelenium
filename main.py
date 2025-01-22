@@ -1,16 +1,18 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-options=webdriver.ChromeOptions()
-options.add_argument("--headless")
 
-driver=webdriver.Chrome(options)
+driver=webdriver.Chrome()
 driver.get("https://www.miuul.com")
-element=driver.find_element(By.XPATH,"//a")
-print(element.text)
-# two argument,First;name,css selector or xpath  Second;Query that finds whichever element you want to find
-# example for xpath   go to webpage and inspect ,you know links in <a> elements ,ctrl+f and write //a
-element.get_attribute("innerText")
-element.get_attribute("href")
-element.get_attribute("innerHTML")
+
+h1_elem=driver.find_element(By.XPATH,"//h1")
+a_elem=driver.find_element(By.XPATH,"//a")
+p_elem=driver.find_element(By.XPATH,"//p")
+
+selector=(By.XPATH,"//p")
+wait=WebDriverWait(driver,10)
+p_element=wait.until(EC.visibility_of_element_located(selector))

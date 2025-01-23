@@ -1,6 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.common.keys import Keys
 import time
 
 
@@ -8,16 +8,12 @@ import time
 driver=webdriver.Chrome()
 driver.get("https://www.miuul.com")
 time.sleep(2)
-h1_elem=driver.find_element(By.XPATH,"//h1")
-a_elem=driver.find_element(By.XPATH,"//a")
-p_elem=driver.find_element(By.XPATH,"//p")
 
-p_elements=driver.find_elements(By.XPATH,"//p")
-p_elements
-elem=None
-if p_elements:
-    elem=p_elements[0]
-else:
-    print("Element not found")
+btn_elements=driver.find_elements(By.XPATH,"//a[@id='login]")
+btn=btn_elements[0]
 
-print(elem)
+btn.click()
+
+inputs=driver.find_elements(By.XPATH,"//a[@name='arama']")
+input=inputs[0]
+input.send_keys("Data Science",Keys.ENTER)

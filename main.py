@@ -3,17 +3,33 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
-
-
-driver=webdriver.Chrome()
-driver.get("https://www.miuul.com")
+options=webdriver.ChromeOptions()
+options.add_argument("--start-maximized")
+driver=webdriver.Chrome(options)
+driver.get("https://miuul.com/katalog")
 time.sleep(2)
 
-btn_elements=driver.find_elements(By.XPATH,"//a[@id='login]")
-btn=btn_elements[0]
+dropdown_button=driver.find_elements(By.XPATH,"//a[@data-bs-toggle='dropdown']")[1]
+dropdown_button.click()
+time.sleep(0.5)
+ul_element=driver.find_elements(By.XPATH,"//ul[@aria-labelledby='navbarDropdown']")[1]
+driver.execute_script("arguments[0].setAttribute('style',arguments[1]);",ul_element,"overflow: scroll; height:80px;")
 
-btn.click()
+driver.execute_script("arguments[0].focus();",ul_element)
+from selenium.webdriver.common.action_chains import ActionChains
 
-inputs=driver.find_elements(By.XPATH,"//a[@name='arama']")
-input=inputs[0]
-input.send_keys("Data Science",Keys.ENTER)
+actions=ActionChains(driver)
+actions.send_keys(Keys.ARROW_DOWN).perform()
+actions.send_keys(Keys.ARROW_DOWN).perform()
+time.sleep(0.25)
+actions.send_keys(Keys.ARROW_DOWN).perform()
+actions.send_keys(Keys.ARROW_DOWN).perform()
+
+
+ #a_element=driver.find_elements(By.XPATH,"//a[contains(@href,'biyo')]")[1]
+ #driver.execute_script("arguments[0].scrollIntoView();",a_element)
+ #driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+ #time.sleep(2)
+ #a_element.click()
+
+

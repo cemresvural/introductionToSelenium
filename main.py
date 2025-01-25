@@ -3,33 +3,24 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
+
+# Initialize Driver
 options=webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
 driver=webdriver.Chrome(options)
-driver.get("https://miuul.com/katalog")
-time.sleep(2)
+driver.get("https://learning.miuul.com/enrollments")
 
-dropdown_button=driver.find_elements(By.XPATH,"//a[@data-bs-toggle='dropdown']")[1]
-dropdown_button.click()
-time.sleep(0.5)
-ul_element=driver.find_elements(By.XPATH,"//ul[@aria-labelledby='navbarDropdown']")[1]
-driver.execute_script("arguments[0].setAttribute('style',arguments[1]);",ul_element,"overflow: scroll; height:80px;")
+course_titles=[]
+for i in range(1,999):
+    driver.get(f"https://learning.miuul.com/enrollments?page={i}")
+    time.sleep(3)
+    #Get Course Titles Per Page
+    course_elements=driver.find_elements(By.XPATH,"//ul//h3")
+    if not course_elements: #len(course_elements) <=0
+        break
+    for course in course_elements:
+      title=course.get_attribute("innerText")
+      course_titles.append(title)
 
-driver.execute_script("arguments[0].focus();",ul_element)
-from selenium.webdriver.common.action_chains import ActionChains
-
-actions=ActionChains(driver)
-actions.send_keys(Keys.ARROW_DOWN).perform()
-actions.send_keys(Keys.ARROW_DOWN).perform()
-time.sleep(0.25)
-actions.send_keys(Keys.ARROW_DOWN).perform()
-actions.send_keys(Keys.ARROW_DOWN).perform()
-
-
- #a_element=driver.find_elements(By.XPATH,"//a[contains(@href,'biyo')]")[1]
- #driver.execute_script("arguments[0].scrollIntoView();",a_element)
- #driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
- #time.sleep(2)
- #a_element.click()
-
-
+print(course_titles)
+print(len(course_titles))

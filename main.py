@@ -3,24 +3,26 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
+import pandas as pd
 
 # Initialize Driver
 options=webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
 driver=webdriver.Chrome(options)
-driver.get("https://learning.miuul.com/enrollments")
+driver.get("https://miuul.com/katalog")
+time.sleep(2)
 
-course_titles=[]
-for i in range(1,999):
-    driver.get(f"https://learning.miuul.com/enrollments?page={i}")
-    time.sleep(3)
-    #Get Course Titles Per Page
-    course_elements=driver.find_elements(By.XPATH,"//ul//h3")
-    if not course_elements: #len(course_elements) <=0
-        break
-    for course in course_elements:
-      title=course.get_attribute("innerText")
-      course_titles.append(title)
+select_option = driver.find_elements(By.XPATH, "//select[@name='sure']/option[contains(text(), '1-3 ay')]")
+select_option[0].click() if select_option else None
 
-print(course_titles)
-print(len(course_titles))
+course_blocks=driver.find_elements(By.XPATH,"//div[contains(@class,'card catalog') and (contains(@class,'block'))]")
+
+for block in course_blocks:
+    course_title=block.find_elements(By.XPATH,".//h6")
+    course_desc=block.find_elements(By.XPATH,".//p")
+
+    course_title=course_title[0].get_attribute("innerText") if course_title else None
+    course_desc=course_desc[0].get_attribute("innerText") if course_desc else None
+
+    print(course_title)
+    print(course_desc)
